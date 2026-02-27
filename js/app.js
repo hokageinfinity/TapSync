@@ -1,7 +1,30 @@
-import { initAudio, loadFromBuffer, play } from "./audioEngine.js";
+import { initAudio, loadFromBuffer, play, stop } from "./audioEngine.js";
 import { saveSong, getSongs, loadSongData } from "./storage.js";
 import { generateAutoMap } from "./beatmapEngine.js";
 import { startTiming } from "./timingEngine.js";
+
+/* ===========================
+   MENU MUSIC SECTION (PUT HERE)
+=========================== */
+
+let menuMusicBuffer = null;
+let menuMusicSource = null;
+
+async function playMenuMusic() {
+    if (!menuMusicBuffer) {
+        const response = await fetch("menu.mp3");
+        const buffer = await response.arrayBuffer();
+        menuMusicBuffer = await loadFromBuffer(buffer);
+    }
+
+    stop(); // stop any playing song
+
+    menuMusicSource = play(menuMusicBuffer);
+}
+
+/* ===========================
+   UI LOGIC
+=========================== */
 
 const playBtn = document.getElementById("playBtn");
 const libraryBtn = document.getElementById("libraryBtn");
