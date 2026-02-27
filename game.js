@@ -69,7 +69,13 @@ requestAnimationFrame(gameLoop);
 gameLoop();
 render();
 
+document.getElementById("loadBtn").addEventListener("click", () => {
+    document.getElementById("musicInput").click();
+});
+
 document.getElementById("musicInput").addEventListener("change", async function(e) {
-await loadSong(e.target.files[0]);
-playSong();
+    if (!e.target.files[0]) return;
+
+    await loadSong(e.target.files[0]);
+    await playSong();
 });
