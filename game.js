@@ -70,12 +70,23 @@ gameLoop();
 render();
 
 document.getElementById("loadBtn").addEventListener("click", () => {
-    document.getElementById("musicInput").click();
-});
-
-document.getElementById("musicInput").addEventListener("change", async function(e) {
+    document.getElementById("musicInput").addEventListener("change", async function(e) {
     if (!e.target.files[0]) return;
 
-    await loadSong(e.target.files[0]);
-    await playSong();
+    // Force AudioContext inside user gesture
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    await audioCtx.resume();
+
+    const arrayBuffer = await e.target.files[0].arrayBuffer();
+    audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+    currentSource = audioCtx.createBufferSource();
+    currentSource.buffer = audioBuffer;
+    currentSource.connect(audioCtx.destination);
+
+    songStartTime = audioCtx.currentTime;
+    currentSource.start(0);
 });
