@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>TapSync Competitive Engine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="hud">
+<div id="score">Score: 0</div>
+<div id="combo">Combo: 0</div>
+<div id="accuracy">Accuracy: 100%</div>
+</div>
+
+<button onclick="document.getElementById('musicInput').click()">Load Song</button>
+
+<input type="file" id="musicInput" accept="audio/*" hidden>
+
+<script src="audio.js"></script>
+<script src="beatmap.js"></script>
+<script src="scoring.js"></script>
+<script src="game.js"></script>
+
+</body>
+</html>

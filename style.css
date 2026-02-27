@@ -1,0 +1,19 @@
+body {
+margin: 0;
+background: black;
+overflow: hidden;
+touch-action: none;
+}
+
+canvas {
+display: block;
+}
+
+#hud {
+position: fixed;
+top: 10px;
+left: 10px;
+color: white;
+font-family: Arial;
+font-size: 16px;
+}
