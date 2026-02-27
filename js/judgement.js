@@ -1,56 +1,56 @@
+import { getSongTime } from "./audioEngine.js";
+
 let score = 0;
 let combo = 0;
-let hits = [];
+let totalHits = 0;
+let successfulHits = 0;
 
-const hitWindows = {
-    perfect: 30,
-    great: 70,
-    good: 120
-};
+export function judge(note, element) {
 
-function judge(noteTime) {
-    const currentTime = getCurrentSongTime();
-    const diff = Math.abs(currentTime - noteTime);
+    const currentTime = getSongTime();
+    const delta = Math.abs(currentTime - note.time);
 
-    if (diff <= hitWindows.perfect) return register("perfect");
-    if (diff <= hitWindows.great) return register("great");
-    if (diff <= hitWindows.good) return register("good");
+    let result;
 
-    return register("miss");
-}
-
-function register(type) {
-    if (type === "miss") {
-        combo = 0;
-    } else {
+    if (delta < 0.08) {
+        score += 300;
         combo++;
+        successfulHits++;
+        result = "Perfect";
+    }
+    else if (delta < 0.15) {
+        score += 100;
+        combo++;
+        successfulHits++;
+        result = "Great";
+    }
+    else {
+        combo = 0;
+        result = "Bad";
     }
 
-    hits.push(type);
-
-    if (type === "perfect") score += 300;
-    if (type === "great") score += 200;
-    if (type === "good") score += 100;
-
+    totalHits++;
     updateHUD();
+    showJudgement(result, note.x, note.y);
+
+    element.remove();
 }
 
 function updateHUD() {
-    document.getElementById("score").innerText = "Score: " + score;
-    document.getElementById("combo").innerText = "Combo: " + combo;
-    document.getElementById("accuracy").innerText = "Accuracy: " + calculateAccuracy() + "%";
+    document.getElementById("score").innerText = score;
+    document.getElementById("combo").innerText = combo;
+    const acc = totalHits === 0 ? 100 : (successfulHits / totalHits) * 100;
+    document.getElementById("accuracy").innerText = acc.toFixed(2) + "%";
 }
 
-function calculateAccuracy() {
-    let total = hits.length;
-    if (!total) return "100.00";
+function showJudgement(text, x, y) {
+    const popup = document.createElement("div");
+    popup.classList.add("judgement");
+    popup.innerText = text;
+    popup.style.left = x + "px";
+    popup.style.top = y + "px";
 
-    let value = 0;
-    hits.forEach(h => {
-        if (h === "perfect") value += 300;
-        if (h === "great") value += 200;
-        if (h === "good") value += 100;
-    });
+    document.body.appendChild(popup);
 
-    return ((value / (total * 300)) * 100).toFixed(2);
+    setTimeout(() => popup.remove(), 800);
 }
