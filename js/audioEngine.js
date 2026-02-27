@@ -11,14 +11,22 @@ export async function loadFromBuffer(arrayBuffer) {
     return await audioCtx.decodeAudioData(arrayBuffer);
 }
 
-export function play(buffer) {
-    source = audioCtx.createBufferSource();
+export function play(buffer, loop = false) {
+    const source = audioCtx.createBufferSource();
     source.buffer = buffer;
+    source.loop = loop;
     source.connect(audioCtx.destination);
-    startTime = audioCtx.currentTime;
-    source.start();
+    source.start(0);
+    return source;
 }
 
 export function getTime() {
     return audioCtx.currentTime - startTime;
+}
+
+export function stop() {
+    if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+    }
 }
