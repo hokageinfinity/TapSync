@@ -1,12 +1,20 @@
-let lastFrameTime = 0;
+import { beatmap } from "./beatmapEngine.js";
+import { getSongTime } from "./audioEngine.js";
+import { createNote } from "./hitObjects.js";
 
-function gameLoop(timestamp) {
-    if (!lastFrameTime) lastFrameTime = timestamp;
-    const delta = timestamp - lastFrameTime;
-    lastFrameTime = timestamp;
+export function startTiming() {
+    requestAnimationFrame(update);
+}
 
-    update(delta);
-    render();
+function update() {
+    const currentTime = getSongTime();
 
-    requestAnimationFrame(gameLoop);
+    for (let note of beatmap) {
+        if (!note.spawned && note.time - currentTime <= 1) {
+            note.spawned = true;
+            createNote(note);
+        }
+    }
+
+    requestAnimationFrame(update);
 }
