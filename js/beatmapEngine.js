@@ -1,18 +1,19 @@
-let currentBeatmap = {
-    metadata: {
-        bpm: 120
-    },
-    hitObjects: []
-};
+export let beatmap = [];
 
-function generateTestBeatmap() {
-    currentBeatmap.hitObjects = [];
-    for (let i = 1; i <= 20; i++) {
-        currentBeatmap.hitObjects.push({
-            time: i * 1000,
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            type: "tap",
+export function generateAutoMap(audioBuffer) {
+
+    beatmap.length = 0;
+
+    const duration = audioBuffer.duration;
+    const bpm = 140;
+    const beatInterval = 60 / bpm;
+
+    for (let time = 2; time < duration; time += beatInterval) {
+        beatmap.push({
+            time,
+            x: Math.random() * window.innerWidth * 0.8 + 100,
+            y: Math.random() * window.innerHeight * 0.8 + 100,
+            spawned: false,
             hit: false
         });
     }
