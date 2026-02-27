@@ -1,53 +1,31 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+import { judge } from "./judgement.js";
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+export function createNote(note) {
 
-function update() {
-    const currentTime = getCurrentSongTime();
+    const gameArea = document.getElementById("gameArea");
 
-    currentBeatmap.hitObjects.forEach(note => {
-        if (!note.hit && currentTime > note.time + 150) {
-            note.hit = true;
-            register("miss");
+    const noteDiv = document.createElement("div");
+    noteDiv.classList.add("note");
+    noteDiv.style.left = note.x + "px";
+    noteDiv.style.top = note.y + "px";
+
+    const approach = document.createElement("div");
+    approach.classList.add("approach");
+    approach.style.left = note.x + "px";
+    approach.style.top = note.y + "px";
+
+    noteDiv.onclick = () => {
+        judge(note, noteDiv);
+        approach.remove();
+    };
+
+    gameArea.appendChild(approach);
+    gameArea.appendChild(noteDiv);
+
+    setTimeout(() => {
+        if (!note.hit) {
+            noteDiv.remove();
+            approach.remove();
         }
-    });
+    }, 1200);
 }
-
-function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const currentTime = getCurrentSongTime();
-
-    currentBeatmap.hitObjects.forEach(note => {
-        if (note.hit) return;
-
-        const diff = note.time - currentTime;
-        if (diff > 1000) return;
-
-        ctx.beginPath();
-        ctx.arc(note.x, note.y, 50, 0, Math.PI * 2);
-        ctx.strokeStyle = "#00ffff";
-        ctx.lineWidth = 4;
-        ctx.stroke();
-    });
-}
-
-canvas.addEventListener("touchstart", e => {
-    const touch = e.touches[0];
-    const x = touch.clientX;
-    const y = touch.clientY;
-
-    currentBeatmap.hitObjects.forEach(note => {
-        if (note.hit) return;
-
-        const dx = x - note.x;
-        const dy = y - note.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 50) {
-            judge(note.time);
-            note.hit = true;
-        }
-    });
-});
