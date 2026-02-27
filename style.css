@@ -1,19 +1,28 @@
 body {
-margin: 0;
-background: black;
-overflow: hidden;
-touch-action: none;
+  margin: 0;
+  background: radial-gradient(circle at center, #111 0%, #000 100%);
+  overflow: hidden;
+  touch-action: none;
+  font-family: Arial, sans-serif;
 }
 
 canvas {
-display: block;
+  display: block;
 }
 
 #hud {
-position: fixed;
-top: 10px;
-left: 10px;
-color: white;
-font-family: Arial;
-font-size: 16px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  color: white;
+}
+
+button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 12px 20px;
+  background: #00ffff;
+  border: none;
+  font-weight: bold;
 }
