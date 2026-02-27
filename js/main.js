@@ -1,12 +1,18 @@
-document.getElementById("loadBtn").addEventListener("click", () => {
-    document.getElementById("musicInput").click();
-});
+import { loadSong, playSong, audioBuffer } from "./audioEngine.js";
+import { generateAutoMap } from "./beatmapEngine.js";
+import { startTiming } from "./timingEngine.js";
 
-document.getElementById("musicInput").addEventListener("change", async function(e) {
-    if (!e.target.files[0]) return;
+const loadBtn = document.getElementById("loadBtn");
+const musicInput = document.getElementById("musicInput");
 
-    await loadAudioFile(e.target.files[0]);
-    generateTestBeatmap();
-    startSong();
-    requestAnimationFrame(gameLoop);
+loadBtn.onclick = () => musicInput.click();
+
+musicInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    await loadSong(file);
+    generateAutoMap(audioBuffer);
+    playSong();
+    startTiming();
 });
