@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>TapSync</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <title>TapSync</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<canvas id="gameCanvas"></canvas>
-
 <div id="hud">
-  <div id="score">Score: 0</div>
-  <div id="combo">Combo: 0</div>
-  <div id="accuracy">Accuracy: 100.00%</div>
+    <div>Score: <span id="score">0</span></div>
+    <div>Combo: <span id="combo">0</span></div>
+    <div>Accuracy: <span id="accuracy">100%</span></div>
 </div>
 
 <button id="loadBtn">Load Song</button>
-<input type="file" id="musicInput" accept="*/*" hidden>
+<input type="file" id="musicInput" accept="audio/*" hidden />
 
-<script src="js/audioEngine.js"></script>
-<script src="js/timingEngine.js"></script>
-<script src="js/judgement.js"></script>
-<script src="js/beatmapEngine.js"></script>
-<script src="js/hitObjects.js"></script>
-<script src="js/main.js"></script>
+<div id="gameArea"></div>
 
+<script type="module" src="./js/main.js"></script>
 </body>
 </html>
