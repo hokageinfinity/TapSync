@@ -3,25 +3,38 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 let audioBuffer;
 let songStartTime = 0;
-let offset = 0; // player calibration
+let offset = 0;
+let currentSource = null;
 
 async function loadSong(file) {
-audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const arrayBuffer = await file.arrayBuffer();
-audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+    }
+
+    if (audioCtx.state === "suspended") {
+        await audioCtx.resume();
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 }
 
-function playSong() {
-if (!audioCtx) return;
+async function playSong() {
+    if (!audioBuffer) return;
 
-const source = audioCtx.createBufferSource();
-source.buffer = audioBuffer;
-source.connect(audioCtx.destination);
+    if (audioCtx.state === "suspended") {
+        await audioCtx.resume();
+    }
 
-songStartTime = audioCtx.currentTime;
-source.start(0);
+    currentSource = audioCtx.createBufferSource();
+    currentSource.buffer = audioBuffer;
+    currentSource.connect(audioCtx.destination);
+
+    songStartTime = audioCtx.currentTime;
+    currentSource.start(0);
 }
 
 function getSongTime() {
-return audioCtx.currentTime - songStartTime - offset;
+    if (!audioCtx) return 0;
+    return audioCtx.currentTime - songStartTime - offset;
 }
