@@ -3,54 +3,53 @@ import { saveSong, getSongs, loadSongData } from "./storage.js";
 import { generateAutoMap } from "./beatmapEngine.js";
 import { startTiming } from "./timingEngine.js";
 
-/* ==============================
-   SCREEN MANAGEMENT
-============================== */
-
-function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(screen => {
-        screen.classList.remove("active");
-    });
-
-    const target = document.getElementById(id);
-    if (target) target.classList.add("active");
-}
-
-/* ==============================
-   WAIT FOR DOM TO LOAD
-============================== */
-
 window.addEventListener("DOMContentLoaded", () => {
+
+    const mainMenu = document.getElementById("mainMenu");
+    const libraryScreen = document.getElementById("libraryScreen");
+    const gameScreen = document.getElementById("gameScreen");
 
     const playBtn = document.getElementById("playBtn");
     const libraryBtn = document.getElementById("libraryBtn");
     const uploadBtn = document.getElementById("uploadBtn");
+    const backBtn = document.getElementById("backToMenuBtn");
     const musicInput = document.getElementById("musicInput");
     const songList = document.getElementById("songList");
 
-    /* ==============================
-       NAVIGATION BUTTONS
-    ============================== */
+    function show(screen) {
+        mainMenu.classList.remove("active");
+        libraryScreen.classList.remove("active");
+        gameScreen.classList.remove("active");
+        screen.classList.add("active");
+    }
 
-    playBtn.onclick = async () => {
+    /* =====================
+       NAVIGATION
+    ===================== */
+
+    playBtn.addEventListener("click", async () => {
         await initAudio();
-        showScreen("libraryScreen");
+        show(libraryScreen);
         renderSongs();
-    };
+    });
 
-    libraryBtn.onclick = async () => {
+    libraryBtn.addEventListener("click", async () => {
         await initAudio();
-        showScreen("libraryScreen");
+        show(libraryScreen);
         renderSongs();
-    };
+    });
 
-    /* ==============================
+    backBtn.addEventListener("click", () => {
+        show(mainMenu);
+    });
+
+    /* =====================
        UPLOAD SONG
-    ============================== */
+    ===================== */
 
-    uploadBtn.onclick = () => {
+    uploadBtn.addEventListener("click", () => {
         musicInput.click();
-    };
+    });
 
     musicInput.addEventListener("change", async (e) => {
         const file = e.target.files[0];
@@ -61,9 +60,9 @@ window.addEventListener("DOMContentLoaded", () => {
         renderSongs();
     });
 
-    /* ==============================
-       RENDER SONG LIBRARY
-    ============================== */
+    /* =====================
+       SONG LIBRARY
+    ===================== */
 
     function renderSongs() {
         songList.innerHTML = "";
@@ -71,9 +70,9 @@ window.addEventListener("DOMContentLoaded", () => {
         const songs = getSongs();
 
         if (songs.length === 0) {
-            const empty = document.createElement("p");
-            empty.innerText = "No songs uploaded yet.";
-            songList.appendChild(empty);
+            const p = document.createElement("p");
+            p.innerText = "No songs uploaded yet.";
+            songList.appendChild(p);
             return;
         }
 
@@ -81,7 +80,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const btn = document.createElement("button");
             btn.innerText = name;
 
-            btn.onclick = async () => {
+            btn.addEventListener("click", async () => {
                 await initAudio();
                 stop();
 
@@ -91,8 +90,8 @@ window.addEventListener("DOMContentLoaded", () => {
                 play(buffer);
                 startTiming();
 
-                showScreen("gameScreen");
-            };
+                show(gameScreen);
+            });
 
             songList.appendChild(btn);
         });
