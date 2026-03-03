@@ -1,64 +1,36 @@
 body {
     margin: 0;
-    background: black;
-    font-family: sans-serif;
-    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #111;
     color: white;
-    touch-action: manipulation;
+    text-align: center;
 }
 
 .screen {
     display: none;
-    width: 100vw;
-    height: 100vh;
+    padding: 40px 20px;
 }
 
 .screen.active {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.logo {
-    font-size: 48px;
-    margin-bottom: 40px;
+    display: block;
 }
 
 button {
-    padding: 15px 30px;
-    margin: 10px;
+    display: block;
+    margin: 15px auto;
+    padding: 15px 25px;
     font-size: 18px;
     border-radius: 10px;
     border: none;
-    background: #00aaff;
+    background: #00c3ff;
+    color: black;
+}
+
+button:active {
+    background: #008ec2;
+}
+
+#songList button {
+    background: #444;
     color: white;
-}
-
-#gameArea {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.note {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: #00aaff;
-    position: absolute;
-    transform: translate(-50%, -50%);
-}
-
-.approach {
-    position: absolute;
-    border-radius: 50%;
-    border: 4px solid white;
-    transform: translate(-50%, -50%);
-    animation: shrink 1s linear forwards;
-}
-
-@keyframes shrink {
-    from { width: 200px; height: 200px; }
-    to { width: 80px; height: 80px; }
 }
